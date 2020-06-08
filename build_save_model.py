@@ -34,7 +34,7 @@ def load_review(review_pkl):
 
     return review_df
 
-def load_review(product_pkl):
+def load_product(product_pkl):
 
     product_df = pd.read_pickle(product_pkl)
 
@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
     print('Load review and product data...')
     review_df = load_review(review_pkl)
-    product_df = load_review(product_pkl)
+    product_df = load_product(product_pkl)
     print('Done load review and product data\n')
 
     print('Consolidate the data')

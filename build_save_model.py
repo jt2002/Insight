@@ -62,6 +62,18 @@ def build_model(X):
 
     return model
 
+def export_model(model, model_name):
+
+    print('... save model')
+    model.save(model_name)
+    print(f'Done save model {model_name}\n')
+
+def save_input_df(df, df_name):
+
+    print('... save input df')
+    df.to_pickle(df_name)
+    print(f'Done save input df {df_name}\n')
+
 if __name__ == '__main__':
 
     review_pkl = './data/Book_review_df.pkl'
@@ -102,7 +114,6 @@ if __name__ == '__main__':
                   validation_data=([X_test[:,0],X_test[:,1]], y_test))
     print('   Training end time = ', datetime.now().strftime("%H:%M:%S"), '\n')
 
-    print('... save model and input data')
-    model.save(saved_model)
-    review_cat_df.to_pickle(saved_input)
-    print(f'Done save model {saved_model} and input data {saved_input}')
+    export_model(model, saved_model)
+    save_input_df(review_cat_df, saved_input)
+    print('Done save model and input data df')

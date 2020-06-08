@@ -9,7 +9,8 @@ To Do:
 
 import sys
 import pandas as pd
-from sklearn.utils import shuffle
+import numpy as np
+from sklearn.model_selection import train_test_split
 from datetime import datetime
 
 from tensorflow.keras.layers import Input, Embedding, Dense
@@ -40,13 +41,13 @@ def load_product(product_pkl):
 
     return product_df
 
-def build_model(user_id, product_id):
+def build_model(X):
 
     # Hyper-parameter - Embedding dimension
     D = 10
 
-    U = len(set(user_id))    # number of users
-    P = len(set(product_id)) # number of products
+    U = len(set(X[:,0]))    # number of users
+    P = len(set(X[:,1]))    # number of products
 
     u = Input(shape=(1,))
     p = Input(shape=(1,))
@@ -70,7 +71,6 @@ if __name__ == '__main__':
     saved_input = './saved_model_input/review_cat_df.pkl'
 
     DEFAULT_CAT = "[Books]"
-    train_test_split = 0.8
 
     print('Load review and product data...')
     review_df = load_review(review_pkl)
@@ -78,37 +78,28 @@ if __name__ == '__main__':
     print('Done load review and product data\n')
 
     print('Consolidate the data')
-    review_cat_df = pd.merge(review_df, product_df, how='left', on=['asin'])
+    review_cat_df = pd.merge(review_df, product_df, how='inner', on=['asin'])
+    review_cat_df['userID'] = review_cat_df['reviewerID'].astype('category').cat.codes
+    review_cat_df['productID'] = review_cat_df['asin'].astype('category').cat.codes
     review_cat_df['category'].fillna(DEFAULT_CAT, inplace=True)
 
-    user_id = review_cat_df['userID'].values
-    product_id = review_cat_df['productID'].values
-    rating = review_cat_df['overall'].values
-    cat_value = review_cat_df['category'].values
-
-    user_id, product_id, rating, cat_value \
-        = shuffle(user_id, product_id, rating, cat_value)
-
     print('Train-Test split\n')
-    Ntrain = int(train_test_split * len(rating))
+    X = np.concatenate((review_cat_df['userID'].values.reshape(-1,1),
+                        review_cat_df['productID'].values.reshape(-1,1)),axis=1)
+    y = review_cat_df['overall'].values
 
-    train_user = user_id[:Ntrain]
-    train_product = product_id[:Ntrain]
-    train_rating = rating[:Ntrain]
-
-    test_user = user_id[Ntrain:]
-    test_product = product_id[Ntrain:]
-    test_rating = rating[Ntrain:]
+    X_train, X_test, y_train, y_test \
+        = train_test_split(X, y, test_size=0.2, random_state=42)
 
     print('Build the model')
-    model = build_model(user_id, product_id)
+    model = build_model(X)
     model.compile(loss='mse',optimizer=SGD(lr=0.02, momentum=0.9))
 
     print('...Traing start time = ', datetime.now().strftime("%H:%M:%S"))
-    r = model.fit(x=[train_user, train_product], y=train_rating,
-                  epochs=10,
+    r = model.fit(x=[X_train[:,0],X_train[:,1]], y=y_train,
+                  epochs=12,
                   batch_size=1024,
-                  validation_data=([test_user, test_product], test_rating))
+                  validation_data=([X_test[:,0],X_test[:,1]], y_test))
     print('   Training end time = ', datetime.now().strftime("%H:%M:%S"), '\n')
 
     print('... save model and input data')

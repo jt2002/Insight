@@ -67,7 +67,7 @@ def export_model(model, model_name):
 def save_input_df(df, df_name):
 
     print('... save input df')
-    df.to_pickle(df_name)
+    df.to_pickle(df_name, protocol=3)
     print(f'Done save input df {df_name}\n')
 
 if __name__ == '__main__':

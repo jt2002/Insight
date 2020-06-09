@@ -72,6 +72,12 @@ def preprocess_product(product_file,product_pkl):
 
         product_df = pd.concat([product_df, lines])
 
+    # Clean up category data
+    product_df.category = product_df.category.apply(' > '.join)
+    product_df.category = product_df.category.str.replace(' >  >  > ','')\
+                            .str.replace(' >  > ','').str.replace(' > $','')
+    product_df = product_df[product_df.category.str.len() <= 125]
+
     print(f'  Writing {product_pkl}')
     product_df.to_pickle(product_pkl)
     print(f'  Done writing {product_pkl}')

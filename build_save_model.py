@@ -29,10 +29,6 @@ def load_review(review_pkl):
     # Reset review_df to make this code section optional
     review_df = scaled_df
 
-    # Reset cat.codes for tensorflow
-    review_df['userID'] = scaled_df['reviewerID'].astype('category').cat.codes
-    review_df['productID'] = scaled_df['asin'].astype('category').cat.codes
-
     return review_df
 
 def load_product(product_pkl):
@@ -82,8 +78,6 @@ if __name__ == '__main__':
     saved_model = './saved_model_input/tf_model.h5'
     saved_input = './saved_model_input/review_cat_df.pkl'
 
-    DEFAULT_CAT = "[Books]"
-
     print('Load review and product data...')
     review_df = load_review(review_pkl)
     product_df = load_product(product_pkl)
@@ -93,7 +87,6 @@ if __name__ == '__main__':
     review_cat_df = pd.merge(review_df, product_df, how='inner', on=['asin'])
     review_cat_df['userID'] = review_cat_df['reviewerID'].astype('category').cat.codes
     review_cat_df['productID'] = review_cat_df['asin'].astype('category').cat.codes
-    review_cat_df['category'].fillna(DEFAULT_CAT, inplace=True)
 
     print('Train-Test split\n')
     X = np.concatenate((review_cat_df['userID'].values.reshape(-1,1),

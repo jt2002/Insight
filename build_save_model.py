@@ -7,6 +7,7 @@ To Do:
     try-except to check folder before saving model and df
 """
 
+import os
 import sys
 import pandas as pd
 import numpy as np

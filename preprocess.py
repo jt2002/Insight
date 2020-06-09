@@ -61,11 +61,13 @@ def preprocess_product(product_file,product_pkl):
     for lines in chunk_df:
         lines = lines[columns]
 
-        lines.dropna(subset=['asin'], inplace=True)
-        lines.dropna(subset=['title'], inplace=True)
-        lines.dropna(subset=['category'], inplace=True)
+        # Missing data in the source
+        lines.dropna(subset=['asin','title','category'], inplace=True)
 
+        # Duplicated data in the source
         lines.drop_duplicates(subset=['asin'], keep='first', inplace=True)
+
+        # Clean up data error
         lines = lines[lines['title'].str.contains('\n')==False]
 
         product_df = pd.concat([product_df, lines])

@@ -1,0 +1,9 @@
+.DS_Store
+**/.DS_Store
+data/Book_review_df.pkl
+data/meta_Book_product_df.pkl
+data/source_data/Book_review_rating.csv
+data/source_data/meta_Books.json
+data/source_data/meta_Books.json.gz
+saved_model_input/tf_model.h5 
+saved_model_input/review_cat_df.pkl

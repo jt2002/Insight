@@ -43,4 +43,4 @@ python recnet.py
 ```
 
 ## Live Application
-[RecNet](http://www.recnet.xyz/)
+[RecNet](https://www.recnet.xyz/)

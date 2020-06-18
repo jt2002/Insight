@@ -4,12 +4,13 @@ Recommender System Powered by Deep Neural Network
 ## Motivation
 - Build a Recommender System using TensorFlow 2.0
 - Deploy the Recommender app on AWS in Django framework
-- Benchmark the system against other Deep Neural Network model and Machine Learning model
+- Benchmark the system against another Machine Learning model
 
 ## Requirements
 - Python 3.x
 - TensorFlow 2.x
 - Scikit-Learn
+- Scikit-Surprise
 - Pandas
 - Numpy
 

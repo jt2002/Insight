@@ -27,7 +27,7 @@ Recommender System Powered by Deep Neural Network
 - Gunzip `meta_Books.json.gz` to `meta_Books.json`
 - Move the JSON file to the folder `data\source_data`
 
-## Run on Command Line
+## Run - Command Line
 Preprocess data
 ```
 python preprocess.py

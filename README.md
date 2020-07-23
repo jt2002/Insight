@@ -2,8 +2,9 @@
 Recommender System Powered by Deep Neural Network
 
 ## Motivation
-- Build a Recommender System using TensorFlow 2.0
+- Build a flexible and extensible Recommender System using TensorFlow 2.0
 - Deploy the Recommender app on AWS in Django framework
+- The app makes REST API call to TensorFlow serving with Docker
 - Benchmark the system against another Machine Learning model
 
 ## Requirements
